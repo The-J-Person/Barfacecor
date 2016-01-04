@@ -9,14 +9,12 @@ from PIL import Image
 cascadePath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascadePath)
 
-# For face recognition we will the the LBPH Face Recognizer 
-recognizer = cv2.face.createLBPHFaceRecognizer()
-
 def get_images_and_labels(path):
     # Append all the absolute image paths in a list image_paths
     # We will not read the image with the .sad extension in the training set
     # Rather, we will use them to test our accuracy of the training
-    image_paths = [os.path.join(path, f) for f in os.listdir(path) if not f.endswith('.haha')]
+    ###image_paths = [os.path.join(path, f) for f in os.listdir(path) if not f.endswith('.sad')]
+    image_paths = [os.path.join(path, f) for f in os.listdir(path)]
     # images will contains face images
     images = []
     # labels will contains the label that is assigned to the image
@@ -34,32 +32,32 @@ def get_images_and_labels(path):
         for (x, y, w, h) in faces:
             images.append(image[y: y + h, x: x + w])
             labels.append(nbr)
-            cv2.imshow("Adding faces to traning set...", image[y: y + h, x: x + w])
-            cv2.waitKey(50)
+            #cv2.imshow("Adding faces to traning set...", image[y: y + h, x: x + w])
+            #cv2.waitKey(50)
     # return the images list and labels list
     return images, labels
 
-# Path to the Yale Dataset
-path = './yalefaces'
-# Call the get_images_and_labels function and get the face images and the 
-# corresponding labels
-images, labels = get_images_and_labels(path)
-cv2.destroyAllWindows()
+def train_recognizer(path):
+    """Trains a face recognizer on a dataset based on a path to a folder containing images"""    
+    # For face recognition we will the the LBPH Face Recognizer 
+    recognizer = cv2.face.createLBPHFaceRecognizer()
+    # Call the get_images_and_labels function and get the face images and the 
+    # corresponding labels
+    images, labels = get_images_and_labels(path)
+    cv2.destroyAllWindows()
+    # Perform the tranining
+    recognizer.train(images, np.array(labels))
+    return recognizer
+    
+def recognize_face(recognizer, path):
+    predict_image_pil = Image.open(path).convert('L')
+    predict_image = np.array(predict_image_pil, 'uint8')
+    face = faceCascade.detectMultiScale(predict_image)
+    nbr_predicted = -1
+    conf = -1
+    for (x, y, w, h) in face:
+        nbr_predicted, conf = recognizer.predict(predict_image[y: y + h, x: x + w])
+    return nbr_predicted, conf
 
-# Perform the tranining
-recognizer.train(images, np.array(labels))
+#print(recognize_face(train_recognizer("./yalefaces"), "./yalefaces/subject01.sad"))
 
-# Append the images with the extension .sad into image_paths
-image_path = [os.path.join(path, f) for f in os.listdir(path) if f.endswith('.haha')]
-predict_image_pil = Image.open(image_path[0]).convert('L')
-predict_image = np.array(predict_image_pil, 'uint8')
-faces = faceCascade.detectMultiScale(predict_image)
-for (x, y, w, h) in faces:
-    nbr_predicted, conf = recognizer.predict(predict_image[y: y + h, x: x + w])
-    nbr_actual = int(os.path.split(image_path[0])[1].split(".")[0].replace("subject", ""))
-    if nbr_actual == nbr_predicted:
-        print ("{} is Correctly Recognized with confidence {}".format(nbr_actual, conf))
-    else:
-        print ("{} is Incorrect Recognized as {} with confidence {}".format(nbr_actual, nbr_predicted,conf))
-    cv2.imshow("Recognizing Face", predict_image[y: y + h, x: x + w])
-    cv2.waitKey(1000)

@@ -1,5 +1,7 @@
 from gi.repository import Gtk
-import Camera
+import face_functions
+import face_recognizer
+import face_functions
 
 class TableWindow(Gtk.Window):
 
@@ -35,15 +37,16 @@ class TableWindow(Gtk.Window):
         self.Entry1 = Gtk.Entry()
         self.Entry1.set_text("Enter your ID")
         
-        button2 = Gtk.Button(label="BarCode")
-        button2.connect("clicked", self.on_barcode_clicked,"barcode")
-        button5 = Gtk.Button(label="Snap")
+        
+        button2 = Gtk.Button(label="BARCODE")
+        button2.connect("clicked", self.on_barcode_clicked,"face_functions")
+        button5 = Gtk.Button(label="SNAP")
         button5.connect("clicked", self.on_snap_clicked)
         button4 = Gtk.Button(label="Start Detector")
         button4.connect("clicked", self.on_start_clicked)
-        label1 = Gtk.Label("Code token")
-        label2 = Gtk.Label("Snap token")
-        label3 = Gtk.Label("YES/NO")
+        self.label1 = Gtk.Label("Code token")
+        self.label2 = Gtk.Label("Snap token")
+        self.label3 = Gtk.Label("YES/NO")
         label4 = Gtk.Label("Admin Menu")
         label5 = Gtk.Label("User Menu")
 
@@ -52,32 +55,36 @@ class TableWindow(Gtk.Window):
         table.attach(button2, 1, 2, 3, 4)
         table.attach(button5, 1, 2, 4, 5)
         table.attach(button4, 2, 3, 3, 6)
-        table.attach(label1, 0, 1, 3, 4)
-        table.attach(label2, 0, 1, 4, 5)
-        table.attach(label3, 0, 2, 5, 6)
+        table.attach(self.label1, 0, 1, 3, 4)
+        table.attach(self.label2, 0, 1, 4, 5)
+        table.attach(self.label3, 0, 2, 5, 6)
         table.attach(label4, 0, 3, 0, 1)
         table.attach(label5, 0, 3, 2, 3)
         
     def on_barcode_clicked(self, button,temp):
-        print(temp)
+        print("")
     def on_snap_clicked(self, button):
-        print("\"Click me\" button was clicked") 
+        if (face_functions.take_picture("./tempSnap/subject"+".temp.png") == True):
+            self.label2.set_markup("SNAP TOKEN")
+        else:
+            self.label2.set_text("Try again")
+         
     def on_start_clicked(self, button):
         print("\"Click me\" button was clicked") 
         
         
-    def on_normal_clicked(self, button):
-        print("\"Click me\" Normal")
+    def on_normal_clicked(self, button): 
+        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
     def on_happy_clicked(self, button):
-        print("\"Click me\" Normal")
+        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
     def on_surprised_clicked(self, button):
-        print("\"Click me\" Normal")
+        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".surprised.png")
     def on_wink_clicked(self, button):
-        print("\"Click me\" Normal")
+        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".wink.png")
     def on_sleepy_clicked(self, button):
-        print("\"Click me\" Normal")
+        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sleepy.png")
     def on_sad_clicked(self, button):
-        print("\"Click me\" Normal") 
+        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sad.png") 
  
 
 win = TableWindow()

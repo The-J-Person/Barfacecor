@@ -1,5 +1,7 @@
 from sys import argv
 import zbar
+import cv2
+
 def exe():    
     # create a Processor
     proc = zbar.Processor()
@@ -21,7 +23,7 @@ def exe():
             #print 'decoded', symbol.type, 'symbol', '"%s"' % symbol.data
             proc.visible = False
             proc.active = False
-            return symbol.data
+            #cv2.imwrite(path,gray)
     
     proc.set_data_handler(my_handler)
     

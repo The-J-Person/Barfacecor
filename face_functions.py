@@ -6,7 +6,7 @@ def detect_face(image):
     cascadePath = "haarcascade_frontalface_default.xml"
     faceCascade = cv2.CascadeClassifier(cascadePath)
     faces = faceCascade.detectMultiScale(image)
-    if len(faces)==0:
+    if len(faces)>=1:
         return True
     return False
         
@@ -18,10 +18,9 @@ def take_picture(path):
     ret, frame = video_capture.read()
     video_capture.release()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite(path,frame)
     if detect_face(frame):
         cv2.imwrite(path,gray)
         return True
     return False
 
-print(take_picture("./Database/subject16.png"))
+#print(take_picture("./Database/subject16.png"))

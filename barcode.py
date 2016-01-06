@@ -1,41 +1,30 @@
-from sys import argv
 import zbar
 import cv2
 
-def exe():    
-    # create a Processor
-    proc = zbar.Processor()
+def get_barcode(img):
+    # create a reader
+    data = []
+    scanner = zbar.ImageScanner()
     
-    # configure the Processor
-    proc.parse_config('enable')
+    # configure the reader
+    scanner.parse_config('enable')
     
-    # initialize the Processor
-    device = '/dev/video0'
-    if len(argv) > 1:
-        device = argv[1]
-    proc.init(device)
+    # obtain image data
+    pil = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    width, height = pil.shape
+    raw = pil.tostring()
     
-    # setup a callback
-    def my_handler(proc, image, closure):
-        # extract results
-        for symbol in image.symbols:
-            # do something useful with results
-            #print 'decoded', symbol.type, 'symbol', '"%s"' % symbol.data
-            proc.visible = False
-            proc.active = False
-            #cv2.imwrite(path,gray)
+    # wrap image data
+    image = zbar.Image(width, height, 'Y800', raw)
     
-    proc.set_data_handler(my_handler)
+    # scan the image for barcodes
+    scanner.scan(image)
     
-    # enable the preview window
-    proc.visible = True
+    # extract results
+    for symbol in image:
+        # do something useful with results
+        data.append(symbol.data)
     
-    # initiate scanning
-    proc.active = True
-    try:
-        # keep scanning until user provides key/mouse input
-        proc.user_wait()
-    except zbar.WindowClosed, e:
-        pass
-    
-print(exe())
+    # clean up
+    del(image)
+    return data

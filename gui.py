@@ -1,4 +1,5 @@
 from gi.repository import Gtk
+import pygtk
 import face_functions
 import face_recognizer
 import face_functions
@@ -71,10 +72,27 @@ class TableWindow(Gtk.Window):
          
     def on_start_clicked(self, button):
         print("\"Click me\" button was clicked") 
-        
+    
+    def id_is_valid(self):
+        text = self.Entry1.get_text()
+        if len(text)!=7:
+            error_message = Gtk.MessageDialog(type=Gtk.MESSAGE_ERROR, buttons=Gtk.BUTTONS_OK)
+            error_message.set_markup("ID must be exactly 7 digits long!")
+            error_message.run()
+            return False
+        for ch in text:
+            if(ch not in string.digits):
+                error_message = Gtk.MessageDialog(type=Gtk.MESSAGE_ERROR, buttons=Gtk.BUTTONS_OK)
+                error_message.set_markup("ID must contain numbers only!")
+                error_message.run()
+                return False
+        return True
+    
+    def trim_barcode(self, barcode):
+        return barcode[:7]
         
     def on_normal_clicked(self, button): 
-        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
+        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
     def on_happy_clicked(self, button):
         face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
     def on_surprised_clicked(self, button):

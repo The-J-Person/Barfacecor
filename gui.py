@@ -5,6 +5,7 @@ import barcode
 import string
 
 class TableWindow(Gtk.Window):
+    
 
     def __init__(self):
         Gtk.Window.__init__(self, title="FACE RECOGNIZER")
@@ -66,12 +67,40 @@ class TableWindow(Gtk.Window):
         print("")
     def on_snap_clicked(self, button):
         if (face_functions.take_picture("./tempSnap/subject"+".temp.png") == True):
-            self.label2.set_markup("SNAP TOKEN")
+            self.label2.set_markup("SNAP TAKEN")
+            print("This button doesn't actually do anything")
         else:
             self.label2.set_text("Try again")
          
     def on_start_clicked(self, button):
-        print("\"Click me\" button was clicked") 
+        self.recognizer = face_recognizer.train_recognizer("./Database")
+        img = face_functions.snap()
+        predicted,conf = face_recognizer.recognize_face(self.recognizer, img)
+        if(predicted==-1):
+            message = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,Gtk.ButtonsType.CANCEL, "Face not recognized.")
+            message.run()
+            message.destroy()
+            return
+        
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Face recognized!")
+        message.format_secondary_text("Recognized as subject "+str(predicted)+" with a doubt rating of "+str(conf))
+        message.run()
+        message.destroy()
+
+        d_barcode = barcode.get_barcode(img)
+        if (len(d_barcode)>0): d_barcode=self.trim_barcode(d_barcode[0])
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Barcode Detection")
+        
+        print("Barcode data found in this picture: " + str(d_barcode))
+        if (len(d_barcode)>0):
+            message.format_secondary_text("Barcode not detected.")
+        elif (d_barcode is string and predicted==int(d_barcode)):
+            message.format_secondary_text("Barcode detected:" + d_barcode + "\nMatches with face.")
+        else:
+            message.format_secondary_text("Barcode detected:" + d_barcode + "\nDoes not match face.")
+        message.run()
+        message.destroy()
+        #print("\"Click me\" button was clicked") 
     
     def id_is_valid(self):
         text = self.Entry1.get_text()
@@ -94,15 +123,15 @@ class TableWindow(Gtk.Window):
     def on_normal_clicked(self, button): 
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
     def on_happy_clicked(self, button):
-        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
+        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
     def on_surprised_clicked(self, button):
-        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".surprised.png")
+        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".surprised.png")
     def on_wink_clicked(self, button):
-        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".wink.png")
+        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".wink.png")
     def on_sleepy_clicked(self, button):
-        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sleepy.png")
+        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sleepy.png")
     def on_sad_clicked(self, button):
-        face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sad.png") 
+        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sad.png") 
  
 
 win = TableWindow()

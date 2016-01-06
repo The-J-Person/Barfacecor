@@ -10,7 +10,7 @@ def get_barcode(img):
     scanner.parse_config('enable')
     
     # obtain image data
-    pil = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    pil = img#pil = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     width, height = pil.shape
     raw = pil.tostring()
     

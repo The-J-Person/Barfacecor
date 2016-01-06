@@ -27,4 +27,11 @@ def take_picture(path):
         return True
     return False
 
+def snap():
+    """Snaps image from camera and returns it in grayscale."""
+    video_capture = cv2.VideoCapture(0)
+    ret, frame = video_capture.read()
+    video_capture.release()
+    return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
 #print(take_picture("./Database/subject16.png")) #test code

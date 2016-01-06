@@ -49,9 +49,10 @@ def train_recognizer(path):
     recognizer.train(images, np.array(labels))
     return recognizer
     
-def recognize_face(recognizer, path):
-    predict_image_pil = Image.open(path).convert('L')
-    predict_image = np.array(predict_image_pil, 'uint8')
+def recognize_face(recognizer, img):#path):
+    #predict_image_pil = Image.open(path).convert('L')
+    #predict_image = np.array(predict_image_pil, 'uint8')
+    predict_image = np.array(img)
     face = faceCascade.detectMultiScale(predict_image)
     nbr_predicted = -1
     conf = -1

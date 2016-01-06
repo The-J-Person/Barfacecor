@@ -1,8 +1,8 @@
 from gi.repository import Gtk
-import pygtk
 import face_functions
 import face_recognizer
-import face_functions
+import barcode
+import string
 
 class TableWindow(Gtk.Window):
 
@@ -76,15 +76,15 @@ class TableWindow(Gtk.Window):
     def id_is_valid(self):
         text = self.Entry1.get_text()
         if len(text)!=7:
-            error_message = Gtk.MessageDialog(type=Gtk.MESSAGE_ERROR, buttons=Gtk.BUTTONS_OK)
-            error_message.set_markup("ID must be exactly 7 digits long!")
+            error_message = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,Gtk.ButtonsType.CANCEL, "ID must be exactly 7 digits long!")
             error_message.run()
+            error_message.destroy()
             return False
         for ch in text:
             if(ch not in string.digits):
-                error_message = Gtk.MessageDialog(type=Gtk.MESSAGE_ERROR, buttons=Gtk.BUTTONS_OK)
-                error_message.set_markup("ID must contain numbers only!")
+                error_message = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,Gtk.ButtonsType.CANCEL, "ID must contain numbers only!")
                 error_message.run()
+                error_message.destroy()
                 return False
         return True
     

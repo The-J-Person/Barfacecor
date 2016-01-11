@@ -3,6 +3,7 @@ import face_functions
 import face_recognizer
 import barcode
 import string
+import os.path
 
 class TableWindow(Gtk.Window):
     
@@ -122,36 +123,71 @@ class TableWindow(Gtk.Window):
         return barcode[:7]
         
     def on_normal_clicked(self, button): 
-        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
-        
-        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
-        message.run()
-        message.destroy()
+        if(self.id_is_valid()): 
+            face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
+            if(os.path.isfile("./Database/subject"+self.Entry1.get_text()+".normal.png")):
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
+                message.run()
+                message.destroy()
+            else:
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Error saving file - try again!")
+                message.run()
+                message.destroy()
     def on_happy_clicked(self, button):
-        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
-        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
-        message.run()
-        message.destroy()
+        if(self.id_is_valid()): 
+            face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
+            if(os.path.isfile("./Database/subject"+self.Entry1.get_text()+".happy.png")):
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
+                message.run()
+                message.destroy()
+            else:
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Error saving file - try again!")
+                message.run()
+                message.destroy()
     def on_surprised_clicked(self, button):
-        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".surprised.png")
-        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
-        message.run()
-        message.destroy()
+        if(self.id_is_valid()): 
+            face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".surprised.png")
+            if(os.path.isfile("./Database/subject"+self.Entry1.get_text()+".suprised.png")):
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
+                message.run()
+                message.destroy()
+            else:
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Error saving file - try again!")
+                message.run()
+                message.destroy()
     def on_wink_clicked(self, button):
-        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".wink.png")
-        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
-        message.run()
-        message.destroy()
+        if(self.id_is_valid()): 
+            face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".wink.png")
+            if(os.path.isfile("./Database/subject"+self.Entry1.get_text()+".wink.png")):
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
+                message.run()
+                message.destroy()
+            else:
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Error saving file - try again!")
+                message.run()
+                message.destroy()
     def on_sleepy_clicked(self, button):
-        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sleepy.png")
-        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
-        message.run()
-        message.destroy()
+        if(self.id_is_valid()): 
+            face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sleepy.png")
+            if(os.path.isfile("./Database/subject"+self.Entry1.get_text()+".sleepy.png")):
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
+                message.run()
+                message.destroy()
+            else:
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Error saving file - try again!")
+                message.run()
+                message.destroy()
     def on_sad_clicked(self, button):
-        if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sad.png") 
-        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
-        message.run()
-        message.destroy()
+        if(self.id_is_valid()): 
+            face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sad.png") 
+            if(os.path.isfile("./Database/subject"+self.Entry1.get_text()+".sad.png")):
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
+                message.run()
+                message.destroy()
+            else:
+                message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Error saving file - try again!")
+                message.run()
+                message.destroy()
 
 win = TableWindow()
 win.connect("delete-event", Gtk.main_quit)

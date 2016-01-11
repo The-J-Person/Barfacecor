@@ -122,7 +122,7 @@ class TableWindow(Gtk.Window):
     def on_surprised_clicked(self, button):
         if(self.id_is_valid()): 
             face_functions.take_picture("./Database/subject"+self.Entry_ID.get_text()+".surprised.png")
-            if(os.path.isfile("./Database/subject"+self.Entry_ID.get_text()+".suprised.png")):
+            if(os.path.isfile("./Database/subject"+self.Entry_ID.get_text()+".surprised.png")):
                 message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, "Picture taken")
                 message.run()
                 message.destroy()

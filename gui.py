@@ -40,26 +40,26 @@ class TableWindow(Gtk.Window):
         self.Entry1.set_text("Enter your ID")
         
         
-        button2 = Gtk.Button(label="BARCODE")
-        button2.connect("clicked", self.on_barcode_clicked,"face_functions")
-        button5 = Gtk.Button(label="SNAP")
-        button5.connect("clicked", self.on_snap_clicked)
+        #button2 = Gtk.Button(label="BARCODE")
+        #button2.connect("clicked", self.on_barcode_clicked,"face_functions")
+        #button5 = Gtk.Button(label="SNAP")
+        #button5.connect("clicked", self.on_snap_clicked)
         button4 = Gtk.Button(label="Start Detector")
         button4.connect("clicked", self.on_start_clicked)
-        self.label1 = Gtk.Label("Code token")
-        self.label2 = Gtk.Label("Snap token")
-        self.label3 = Gtk.Label("YES/NO")
+        #self.label1 = Gtk.Label("")
+        #self.label2 = Gtk.Label("")
+        #self.label3 = Gtk.Label("YES/NO")
         label4 = Gtk.Label("Admin Menu")
         label5 = Gtk.Label("User Menu")
 
         table.attach(self.Entry1, 0, 1, 1, 2)
         table.attach(hbox, 1, 3, 1, 2)
-        table.attach(button2, 1, 2, 3, 4)
-        table.attach(button5, 1, 2, 4, 5)
-        table.attach(button4, 2, 3, 3, 6)
-        table.attach(self.label1, 0, 1, 3, 4)
-        table.attach(self.label2, 0, 1, 4, 5)
-        table.attach(self.label3, 0, 2, 5, 6)
+        #table.attach(button2, 1, 2, 3, 4)
+        #table.attach(button5, 1, 2, 4, 5)
+        table.attach(button4, 0, 3, 3, 6)
+        #table.attach(self.label1, 0, 1, 3, 4)
+        #table.attach(self.label2, 0, 1, 4, 5)
+       # table.attach(self.label3, 0, 2, 5, 6)
         table.attach(label4, 0, 3, 0, 1)
         table.attach(label5, 0, 3, 2, 3)
         
@@ -76,7 +76,7 @@ class TableWindow(Gtk.Window):
         self.recognizer = face_recognizer.train_recognizer("./Database")
         img = face_functions.snap()
         predicted,conf = face_recognizer.recognize_face(self.recognizer, img)
-        if(predicted==-1):
+        if(predicted==-1 or conf>50):
             message = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,Gtk.ButtonsType.CANCEL, "Face not recognized.")
             message.run()
             message.destroy()
@@ -91,10 +91,11 @@ class TableWindow(Gtk.Window):
         if (len(d_barcode)>0): d_barcode=self.trim_barcode(d_barcode[0])
         message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Barcode Detection")
         
+        print(predicted)
         print("Barcode data found in this picture: " + str(d_barcode))
-        if (len(d_barcode)>0):
+        if (len(d_barcode)==0):
             message.format_secondary_text("Barcode not detected.")
-        elif (d_barcode is string and predicted==int(d_barcode)):
+        elif (int(predicted)==int(d_barcode)):
             message.format_secondary_text("Barcode detected:" + d_barcode + "\nMatches with face.")
         else:
             message.format_secondary_text("Barcode detected:" + d_barcode + "\nDoes not match face.")
@@ -122,17 +123,35 @@ class TableWindow(Gtk.Window):
         
     def on_normal_clicked(self, button): 
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".normal.png")
+        
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
+        message.run()
+        message.destroy()
     def on_happy_clicked(self, button):
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".happy.png")
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
+        message.run()
+        message.destroy()
     def on_surprised_clicked(self, button):
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".surprised.png")
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
+        message.run()
+        message.destroy()
     def on_wink_clicked(self, button):
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".wink.png")
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
+        message.run()
+        message.destroy()
     def on_sleepy_clicked(self, button):
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sleepy.png")
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
+        message.run()
+        message.destroy()
     def on_sad_clicked(self, button):
         if(self.id_is_valid()): face_functions.take_picture("./Database/subject"+self.Entry1.get_text()+".sad.png") 
- 
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.CANCEL, "Picture taken")
+        message.run()
+        message.destroy()
 
 win = TableWindow()
 win.connect("delete-event", Gtk.main_quit)

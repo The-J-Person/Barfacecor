@@ -20,7 +20,7 @@ def take_picture(path):
     video_capture.release()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     #
-    #cv2.imwrite(path,frame)
+    cv2.imwrite(path,frame)
     #
     if detect_face(frame):
         cv2.imwrite(path,gray)
